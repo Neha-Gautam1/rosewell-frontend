@@ -52,7 +52,7 @@ export default function Footer() {
         <div>
           <h3 className="text-lg font-semibold text-white">Contact Info</h3>
           <ul className="mt-3 space-y-2">
-            <li>+91 98765 43210</li>
+            <li>+91 8787009870</li>
             <li>info@rosewellcarpets.com</li>
             <li>Mirzapur, UP 231001</li>
           </ul>

@@ -94,7 +94,7 @@ a story of tradition, craftsmanship, and the enduring artistry of Khalil Ahmad a
               your home, you're not just decorating a space - you're preserving
               a tradition and supporting a community."
             </p>
-            <h4 className="font-semibold text-gray-900">Ramesh Kumar</h4>
+            <h4 className="font-semibold text-gray-900">RUSTAM SOHRAB</h4>
             <p className="text-gray-600">Founder & CEO</p>
           </div>
         </div>

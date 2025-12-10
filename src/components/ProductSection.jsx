@@ -76,11 +76,7 @@ export default function ProductSection() {
                   {product.description}
                 </p>
 
-                {/* Price */}
-                <p className="text-orange-600 font-semibold text-xl mt-4">
-                  ${product.price}
-                </p>
-
+              
                 {/* Rating */}
                 <div className="flex items-center mt-2 text-sm text-gray-600">
                   <Star className="w-4 h-4 text-yellow-500 mr-1 fill-yellow-500" />

@@ -257,75 +257,104 @@ export default function Cart() {
         </div>
 
         {/* Checkout Summary */}
-        {cartItems.length > 0 && (
-          <div className="w-full lg:w-1/3 bg-white shadow-md rounded-lg p-6 h-fit">
-            {!checkout ? (
-              <>
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">Order Summary</h3>
-                <div className="flex justify-between text-gray-700 mb-2">
-                  <span>Subtotal</span>
-                  <span>₹{total}</span>
-                </div>
-                <div className="flex justify-between text-gray-700 mb-2">
-                  <span>Shipping</span>
-                  <span>₹100</span>
-                </div>
-                <hr className="my-3" />
-                <div className="flex justify-between font-semibold text-gray-900 mb-4">
-                  <span>Total</span>
-                  <span>₹{total + 100}</span>
-                </div>
-                <button
-                  onClick={() => setCheckout(true)}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-md font-medium"
-                >
-                  Proceed to Checkout
-                </button>
-              </>
-            ) : (
-              <>
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">Select Address & UPI</h3>
-                <div className="mb-4 text-gray-800">
-                  <label className="block font-medium mb-1">Select Address</label>
-                  <select
-                    value={selectedAddress}
-                    onChange={(e) => setSelectedAddress(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  >
-                    {user?.addresses?.map((addr, i) => (
-                      <option key={i} value={addr}>
-                        {addr}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+      {/* Checkout Summary */}
+{cartItems.length > 0 && (
+  <div className="w-full lg:w-1/3 bg-white shadow-md rounded-lg p-6 h-fit">
+    {!checkout ? (
+      <>
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">Order Summary</h3>
 
-                <div className="mb-4 text-gray-800">
-                  <label className="block font-medium mb-1">Select UPI ID</label>
-                  <select
-                    value={selectedUpi}
-                    onChange={(e) => setSelectedUpi(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  >
-                    {user?.upiIds?.map((upi, i) => (
-                      <option key={i} value={upi}>
-                        {upi}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+        <div className="flex justify-between text-gray-700 mb-2">
+          <span>Subtotal</span>
+          <span>₹{total}</span>
+        </div>
 
-                <button
-                  onClick={handlePayment}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-md font-medium"
-                  disabled={!selectedAddress || !selectedUpi}
-                >
-                  Proceed to Payment
-                </button>
-              </>
-            )}
+        <div className="flex justify-between text-gray-700 mb-2">
+          <span>Shipping</span>
+          <span>₹100</span>
+        </div>
+
+        <hr className="my-3" />
+
+        <div className="flex justify-between font-semibold text-gray-900 mb-4">
+          <span>Total</span>
+          <span>₹{total + 100}</span>
+        </div>
+
+        <button
+          onClick={() => setCheckout(true)}
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-md font-medium"
+        >
+          Proceed to Checkout
+        </button>
+      </>
+    ) : (
+      <>
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">Select Address & UPI</h3>
+
+        {/* ---------- ADDRESS SECTION ---------- */}
+        {user?.addresses?.length > 0 ? (
+          <div className="mb-4 text-gray-800">
+            <label className="block font-medium mb-1">Select Address</label>
+            <select
+              value={selectedAddress}
+              onChange={(e) => setSelectedAddress(e.target.value)}
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            >
+              {user.addresses.map((addr, i) => (
+                <option key={i} value={addr}>
+                  {addr}
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : (
+          <div className="mb-4 bg-yellow-50 p-3 rounded-md text-yellow-800 border border-yellow-300">
+            <p className="font-medium mb-1">No address found.</p>
+            <p className="text-sm">
+              Please add an address from the <span className="font-semibold">Profile → Settings</span> section.
+            </p>
           </div>
         )}
+
+        {/* ---------- UPI SECTION ---------- */}
+        {user?.upiIds?.length > 0 ? (
+          <div className="mb-4 text-gray-800">
+            <label className="block font-medium mb-1">Select UPI ID</label>
+            <select
+              value={selectedUpi}
+              onChange={(e) => setSelectedUpi(e.target.value)}
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            >
+              {user.upiIds.map((upi, i) => (
+                <option key={i} value={upi}>
+                  {upi}
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : (
+          <div className="mb-4 bg-red-50 p-3 rounded-md text-red-700 border border-red-300">
+            <p className="font-medium mb-1">No UPI ID found.</p>
+            <p className="text-sm">
+              Please add a UPI ID from the <span className="font-semibold">Profile → Settings</span> section.
+            </p>
+          </div>
+        )}
+
+        {/* ---------- PAYMENT BUTTON ---------- */}
+        <button
+          onClick={handlePayment}
+          className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-md font-medium"
+          disabled={!selectedAddress || !selectedUpi}
+        >
+          Proceed to Payment
+        </button>
+      </>
+    )}
+  </div>
+)}
+
       </main>
 
       <Footer />

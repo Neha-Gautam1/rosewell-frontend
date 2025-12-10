@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
+
 
 // Simple Badge component
 function Badge({ children, className = "" }) {
@@ -55,6 +57,7 @@ function AccordionContent({ children, open }) {
 }
 
 export default function FAQPage({ onNavigate }) {
+  const navigate = useNavigate();
   const faqCategories = [
     {
       category: "General",
@@ -185,14 +188,15 @@ export default function FAQPage({ onNavigate }) {
             Our carpet experts are here to help answer any questions about our products and services.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => onNavigate && onNavigate("/contact")}
-              className="bg-gradient-to-r from-amber-600 to-orange-600 text-white px-6 py-3 rounded-lg hover:from-amber-700 hover:to-orange-700 transition-all duration-300"
-            >
-              Contact Us
-            </button>
+          <button
+  onClick={() => navigate("/contact")}
+  className="bg-gradient-to-r from-amber-600 to-orange-600 text-white px-6 py-3 rounded-lg hover:from-amber-700 hover:to-orange-700 transition-all duration-300"
+>
+  Contact Us
+</button>
+
             <button className="border border-amber-600 text-amber-600 px-6 py-3 rounded-lg hover:bg-amber-50 transition-all duration-300">
-              Call: +91 98765 43210
+              Call: +91 8787009870
             </button>
           </div>
         </div>
@@ -229,7 +233,7 @@ export default function FAQPage({ onNavigate }) {
             Browse our collection of authentic handmade carpets from Mirzapur
           </p>
           <button
-            onClick={() => onNavigate && onNavigate("/products")}
+           onClick={() => navigate("/")}
             className="bg-gradient-to-r from-amber-600 to-orange-600 text-white px-8 py-3 rounded-lg hover:from-amber-700 hover:to-orange-700 transition-all duration-300"
           >
             Shop Now

@@ -116,22 +116,7 @@ const CollectionPage = () => {
             </div>
           </div>
 
-          {/* Price Range */}
-          <div>
-            <h2 className="text-sm font-medium text-gray-700 mb-2">Price Range</h2>
-            <input
-              type="range"
-              min="0"
-              max="5000"
-              value={price[1]}
-              onChange={(e) => setPrice([0, Number(e.target.value)])}
-              className="w-full accent-black"
-            />
-            <div className="flex justify-between text-sm text-gray-500">
-              <span>₹{price[0]}</span>
-              <span>₹{price[1]}</span>
-            </div>
-          </div>
+         
         </aside>
 
         {/* Products Area */}

@@ -17,6 +17,47 @@ export default function ProductDetails() {
 
   const token = localStorage.getItem("token");
 
+  // -----------------------------
+  // Add to Wishlist Function
+  // -----------------------------
+  const handleAddToWishlist = async () => {
+    if (!token) return toast.error("Please log in to add to wishlist");
+
+    try {
+      await axios.post(
+        "https://rosewell.onrender.com/api/wishlist",
+        { carpetId: id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("Added to wishlist!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to add to wishlist");
+    }
+  };
+
+  // -----------------------------
+  // Add to Cart Function
+  // -----------------------------
+  const handleAddToCart = async () => {
+    if (!token) return toast.error("Please log in to add items to cart");
+
+    try {
+      await axios.post(
+        "https://rosewell.onrender.com/api/cart",
+        { carpetId: id, quantity: 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("Added to cart!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to add to cart");
+    }
+  };
+
+  // -----------------------------
+  // Fetch Product Details
+  // -----------------------------
   useEffect(() => {
     const fetchCarpet = async () => {
       try {
@@ -34,6 +75,9 @@ export default function ProductDetails() {
     fetchCarpet();
   }, [id]);
 
+  // -----------------------------
+  // Add Product Review
+  // -----------------------------
   const handleAddReview = async (e) => {
     e.preventDefault();
     if (!token) return toast.error("Please log in to add a review");
@@ -55,6 +99,10 @@ export default function ProductDetails() {
     }
   };
 
+  // -----------------------------
+  // UI
+  // -----------------------------
+
   if (loading)
     return <p className="text-center mt-10">Loading product...</p>;
 
@@ -66,15 +114,42 @@ export default function ProductDetails() {
       <Navbar />
 
       <main className="flex-1 container mx-auto p-6">
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Product Image */}
-          <img
-            src={carpet.image}
-            alt={carpet.name}
-            className="w-full h-96 object-cover rounded-lg shadow-lg"
-          />
+        <div className="grid md:grid-cols-2 gap-10">
+          
+          {/* PRODUCT IMAGE */}
+          <div>
+            <img
+              src={carpet.image}
+              alt={carpet.name}
+              className="w-full h-[480px] object-cover rounded-xl shadow-md"
+            />
 
-          {/* PRODUCT MAIN DETAILS */}
+            {/* Buttons Under Image */}
+            <div className="flex gap-4 mt-6">
+              {/* Add to Cart */}
+              <button
+                onClick={handleAddToCart}
+                className={`px-6 py-3 rounded-lg text-white text-sm ${
+                  carpet.stock === 0
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-orange-500 hover:bg-orange-600"
+                }`}
+                disabled={carpet.stock === 0}
+              >
+                {carpet.stock === 0 ? "Out of Stock" : "Add to Cart"}
+              </button>
+
+              {/* Wishlist */}
+              <button
+                onClick={handleAddToWishlist}
+                className="px-6 py-3 rounded-lg border border-orange-600 text-orange-600 hover:bg-orange-50 text-sm"
+              >
+                Add to Wishlist
+              </button>
+            </div>
+          </div>
+
+          {/* PRODUCT DETAILS */}
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-3">
               {carpet.name}
@@ -95,7 +170,7 @@ export default function ProductDetails() {
               Category: {carpet.category}
             </p>
 
-            {/* PRODUCT DETAILS ALWAYS VISIBLE */}
+            {/* Always visible details */}
             <div className="bg-white p-5 rounded-lg shadow-md text-gray-800">
               <h2 className="text-xl font-semibold mb-3">
                 Product Details
@@ -145,25 +220,20 @@ export default function ProductDetails() {
                       <b>Disclaimer:</b> {carpet.disclaimer}
                     </p>
                   )}
-
-                  {/* You can add more fields here if needed */}
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        {/* REVIEWS SECTION */}
+        {/* REVIEWS */}
         <section className="mt-14">
           <h2 className="text-2xl font-bold mb-4 text-gray-800">Reviews</h2>
 
           {carpet.reviews?.length > 0 ? (
             <div className="space-y-4">
               {carpet.reviews.map((rev) => (
-                <div
-                  key={rev._id}
-                  className="bg-white p-4 rounded-lg shadow-sm"
-                >
+                <div key={rev._id} className="bg-white p-4 rounded-lg shadow-sm">
                   <p className="font-semibold text-gray-800">
                     ⭐ {rev.rating}/5
                   </p>
