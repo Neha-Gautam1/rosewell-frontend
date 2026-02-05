@@ -12,7 +12,7 @@ const ManageProducts = () => {
     discount: 0,
     category: "traditional",
     stock: 0,
-    image: null,
+    images: [], // multiple image,
 
     // NEW FIELDS
     details: "",
@@ -43,11 +43,12 @@ const ManageProducts = () => {
   // Handle input change
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "image") {
-      setForm({ ...form, image: files[0] });
-    } else {
-      setForm({ ...form, [name]: value });
-    }
+    if (name === "images") {
+  setForm({ ...form, images: files });
+} else {
+  setForm({ ...form, [name]: value });
+}
+
   };
 
   // Create Product
@@ -55,8 +56,15 @@ const ManageProducts = () => {
     try {
       const formData = new FormData();
       Object.entries(form).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
+  if (key === "images") {
+    for (let i = 0; i < value.length; i++) {
+      formData.append("images", value[i]);
+    }
+  } else {
+    formData.append(key, value);
+  }
+});
+
 
       const { data } = await axios.post(
         "https://rosewell.onrender.com/api/carpets",
@@ -82,8 +90,15 @@ const ManageProducts = () => {
     try {
       const formData = new FormData();
       Object.entries(form).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
+  if (key === "images") {
+    for (let i = 0; i < value.length; i++) {
+      formData.append("images", value[i]);
+    }
+  } else {
+    formData.append(key, value);
+  }
+});
+
 
       const { data } = await axios.put(
         `https://rosewell.onrender.com/api/carpets/${editingProduct._id}`,
@@ -118,7 +133,8 @@ const ManageProducts = () => {
       discount: product.discount,
       category: product.category,
       stock: product.stock,
-      image: null,
+      images: [],
+
 
       // NEW FIELDS
       details: product.details || "",
@@ -153,7 +169,8 @@ const ManageProducts = () => {
       discount: 0,
       category: "traditional",
       stock: 0,
-      image: null,
+      images: [],
+
 
       details: "",
       disclaimer: "",
@@ -206,7 +223,15 @@ const ManageProducts = () => {
 
               <input type="text" name="craftsmen" placeholder="Craftsmen (comma-separated)" value={form.craftsmen} onChange={handleChange} className="border p-2 rounded-md" />
 
-              <input type="file" name="image" onChange={handleChange} accept="image/*" className="border p-2 rounded-md" />
+            <input
+  type="file"
+  name="images"
+  multiple
+  accept="image/*"
+  onChange={handleChange}
+  className="border p-2 rounded-md"
+/>
+
 
               <textarea name="description" placeholder="Short Description" value={form.description} onChange={handleChange} className="border p-2 rounded-md col-span-2" />
 
@@ -241,7 +266,17 @@ const ManageProducts = () => {
             {products.length > 0 ? (
               products.map((product) => (
                 <div key={product._id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-                  <img src={product.image} alt={product.name} className="w-full h-60 object-cover" />
+                <div className="flex gap-2 overflow-x-auto">
+  {product.images?.map((img, index) => (
+    <img
+      key={index}
+      src={img}
+      alt="carpet"
+      className="h-48 w-48 object-cover rounded-md"
+    />
+  ))}
+</div>
+
 
                   <div className="p-6">
                     <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>

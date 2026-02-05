@@ -9,6 +9,7 @@ export default function ProductDetails() {
   const { id } = useParams();
   const [carpet, setCarpet] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [activeImage, setActiveImage] = useState(0);
 
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -64,6 +65,11 @@ export default function ProductDetails() {
         const { data } = await axios.get(
           `https://rosewell.onrender.com/api/carpets/${id}`
         );
+        
+    // ✅ SAFETY GUARD
+    if (!data.images || data.images.length === 0) {
+      data.images = ["/placeholder.png"]; 
+    }
         setCarpet(data);
       } catch (err) {
         console.error(err);
@@ -116,13 +122,33 @@ export default function ProductDetails() {
       <main className="flex-1 container mx-auto p-6">
         <div className="grid md:grid-cols-2 gap-10">
           
-          {/* PRODUCT IMAGE */}
-          <div>
-            <img
-              src={carpet.image}
-              alt={carpet.name}
-              className="w-full h-[480px] object-cover rounded-xl shadow-md"
-            />
+          
+         {/* PRODUCT IMAGES */}
+<div>
+ {/* MAIN IMAGE */}
+<img
+  src={carpet.images?.[activeImage]}
+  alt="Selected carpet"
+  className="w-full h-[480px] object-cover rounded-xl shadow-md"
+/>
+
+{/* THUMBNAILS */}
+<div className="flex gap-3 mt-4 overflow-x-auto scrollbar-hide">
+  {carpet.images?.map((img, index) => (
+    <img
+      key={index}
+      src={img}
+      alt={`carpet-thumb-${index}`}
+      onClick={() => setActiveImage(index)}
+      className={`h-24 w-24 object-cover rounded-md cursor-pointer border transition ${
+        activeImage === index
+          ? "border-orange-500 scale-105"
+          : "border-gray-300 opacity-70 hover:opacity-100"
+      }`}
+    />
+  ))}
+</div>
+
 
             {/* Buttons Under Image */}
             <div className="flex gap-4 mt-6">
